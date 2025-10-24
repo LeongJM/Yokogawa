@@ -13,10 +13,39 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="Resource Files\Calculation">
+      <UniqueIdentifier>{9f32986e-1bfe-40e4-8ff2-df215f46c78e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\ErrorHandling">
+      <UniqueIdentifier>{de09c89f-b43a-4cae-8c1e-809c7632f493}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\UI">
+      <UniqueIdentifier>{18a968ec-40b3-4119-b2b7-be5398845e0c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="BasicCalculator.cpp">
+    <ClCompile Include="main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Calculations\BC_Calculation.cpp">
+      <Filter>Resource Files\Calculation</Filter>
+    </ClCompile>
+    <ClCompile Include="ErrorHandling\BC_ErrorHandling.cpp">
+      <Filter>Resource Files\ErrorHandling</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\BC_UI.cpp">
+      <Filter>Resource Files\UI</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Calculations\BC_Calculation.h">
+      <Filter>Resource Files\Calculation</Filter>
+    </ClInclude>
+    <ClInclude Include="ErrorHandling\BC_ErrorHandling.h">
+      <Filter>Resource Files\ErrorHandling</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\BC_UI.h">
+      <Filter>Resource Files\UI</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
