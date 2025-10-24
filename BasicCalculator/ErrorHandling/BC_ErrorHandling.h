@@ -1,3 +1,9 @@
+/**
+* Author:           Leong Jun Ming
+* Date:             24/10/25
+* Description:      Exception Class
+**/
+
 #ifndef BC_ERRORHANDLING_H
 #define BC_ERRORHANDLING_H
 

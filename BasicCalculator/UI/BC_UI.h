@@ -1,17 +1,28 @@
+/**
+* Author:           Leong Jun Ming
+* Date:             24/10/25
+* Description:      Handles the display of Console elements
+**/
+
 #ifndef BC_UI_H
 #define BC_UI_H
 
 #include <string>
+#include "../ErrorHandling/BC_ErrorHandling.h"
 
 class BC_ConsoleUI
 {
+	bool _first = false;
 public:
 	BC_ConsoleUI();
 	~BC_ConsoleUI();
 
-	const std::string UI_Introduction() const;
-	const std::string UI_Calculation(double result);
-	const std::string UI_Failure() const;
+	// Prints intro on Console
+	const std::string UI_Introduction();
+	// Displays final result on Console
+	const std::string UI_DisplayResult(double result);
+	// Displays error on Console
+	const std::string UI_Failure(const BC_Exception& exception) const;
 };
 
 #endif
