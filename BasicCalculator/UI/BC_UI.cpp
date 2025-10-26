@@ -28,5 +28,15 @@ const std::string BC_ConsoleUI::UI_DisplayResult(double result)
 
 const std::string BC_ConsoleUI::UI_Failure(const BC_Exception& e) const
 {
-	return "Failure: " + std::string(e.what());
+	return "Failure: " + std::string(e.type()) + " " + std::string(e.what());
+}
+
+const std::string BC_ConsoleUI::UI_History(const std::vector<std::pair<std::string, double>> history)
+{
+	return std::string();
+}
+
+const std::string BC_ConsoleUI::UI_History(const std::pair<std::string, double> history)
+{
+	return std::string();
 }

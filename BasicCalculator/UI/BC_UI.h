@@ -8,6 +8,7 @@
 #define BC_UI_H
 
 #include <string>
+#include <vector>
 #include "../ErrorHandling/BC_ErrorHandling.h"
 
 class BC_ConsoleUI
@@ -22,7 +23,10 @@ public:
 	// Displays final result on Console
 	const std::string UI_DisplayResult(double result);
 	// Displays error on Console
-	const std::string UI_Failure(const BC_Exception& exception) const;
+	const std::string UI_Failure(const BC_Exception& e) const;
+	// Displays History
+	const std::string UI_History(const std::vector<std::pair<std::string, double>> history);
+	const std::string UI_History(const std::pair<std::string, double> history);
 };
 
 #endif

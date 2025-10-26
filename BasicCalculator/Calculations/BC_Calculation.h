@@ -19,6 +19,7 @@ enum class OperationType : size_t
 	Multiply,
 	Divide,
 	Power,
+	Exponent,
 	SquareRoot,
 };
 
@@ -28,19 +29,23 @@ class BC_Calculator
 {
 	typedef std::tuple<std::string, std::string, std::string> CTokens;
 	
-	std::vector<std::pair<std::string, double>> _history;
+	std::vector<std::pair<std::string, long double>> _history;
 
+	// Tokenizes the full string input into three parts
 	CTokens Tokenize(const std::string& str);
 public:
 	BC_Calculator();
 	~BC_Calculator();
 
-	double Calculate(const std::string& str);
+	// Calculates a result with a given input string
+	long double Calculate(const std::string& str);
 
-	double ReturnLastResult() const;
+	// Returns the last calculated result
+	long double ReturnLastResult() const;
 
-	const std::vector<std::pair<std::string, double>>& GetHistory() const;
-	const double GetHistory(int howManyPrev = 0) const;
+	// Gets the full History, or a single calculation and result
+	const std::vector<std::pair<std::string, long double>>& GetHistory() const;
+	const std::pair<std::string, long double> GetHistory(int index = 0) const;
 	
 };
 
