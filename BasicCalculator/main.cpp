@@ -45,6 +45,7 @@ int main()
         }
         catch (const BC_Exception& e)
         {
+            // Catches all Exceptions here
             std::cout << bcui.UI_Failure(e) << std::endl;
         }
     }

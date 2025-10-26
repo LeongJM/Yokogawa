@@ -44,11 +44,10 @@ long double BC_Calculator::Calculate(const std::string& str)
 	{
 		throw BC_Exception(ErrorType::InvalidArg, e.what());
 	}
+
 	std::string opVal = std::get<1>(tokens);
-
-	//std::cout << std::get<0>(tokens) << " : " << std::get<1>(tokens) << " : " << std::get<2>(tokens) << std::endl;
-
 	long double val1 = 0.0f, val2 = 0.0f;
+
 	try
 	{
 		val1 = std::stold(std::get<0>(tokens));
@@ -56,8 +55,6 @@ long double BC_Calculator::Calculate(const std::string& str)
 
 		// Uses stold's own checks, so it discards whitespaces and any unnecessary values
 		// Add additional checking in to throw if it fails?
-
-		//std::cout << val1 << " : " << val2 << std::endl;
 	}
 	catch (const std::invalid_argument& e) // Cannot convert to any digits at all
 	{
@@ -74,7 +71,7 @@ long double BC_Calculator::Calculate(const std::string& str)
 	switch (ConvertStringToOp(opVal))
 	{
 	case OperationType::Plus:
-		// Check if addition will cause overflow
+		// Checks for overflow
 		if (val1 > 0 && val2 > 0 && std::numeric_limits<long double>::max() - val1 < val2)
 		{
 			throw BC_Exception(ErrorType::OutOfRange, "");
@@ -100,6 +97,7 @@ long double BC_Calculator::Calculate(const std::string& str)
 		finalResult = val1 * val2;
 		break;
 	case OperationType::Divide:
+		// Checks for Divide by 0
 		if (val2 == 0)
 		{
 			throw BC_Exception(ErrorType::DivideByZero, "");
@@ -107,6 +105,7 @@ long double BC_Calculator::Calculate(const std::string& str)
 		finalResult = val1 / val2;
 		break;
 	case OperationType::Power:
+		// Checks for overflow
 		finalResult = std::powl(val1, val2);
 		if (finalResult == HUGE_VALL || finalResult == -HUGE_VALL)
 		{
@@ -114,6 +113,7 @@ long double BC_Calculator::Calculate(const std::string& str)
 		}
 		break;
 	case OperationType::Root:
+		// Checks for Root by 0
 		if (val2 == 0)
 		{
 			throw BC_Exception(ErrorType::InvalidArg, "");
@@ -138,6 +138,7 @@ long double BC_Calculator::Calculate(const std::string& str)
 
 std::vector<std::pair<std::string, long double>> BC_Calculator::GetHistory(size_t maxCalcs) const
 {
+	// Sends History in reverse order
 	if (maxCalcs <= 0)
 	{
 		return std::vector<std::pair<std::string, long double>>(_history.rbegin(), _history.rend());
