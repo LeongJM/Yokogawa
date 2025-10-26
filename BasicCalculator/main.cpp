@@ -18,12 +18,12 @@ int main()
         std::string str;
         std::cout << bcui.UI_Introduction();
         std::getline(std::cin, str);
-        if (str.find("exit") != std::string::npos)
+        if (str == ("exit"))
         {
             std::cout << bcui.UI_Exit() << std::endl;
             break;
         }
-        if (str.find("history") != std::string::npos)
+        if (str.find("history") == 0)
         {
             std::string num = str.substr(7);
             size_t maxView = 0;
@@ -37,6 +37,11 @@ int main()
                 //continue;
             }
             std::cout << bcui.UI_History(bccc.GetHistory(maxView)) << std::endl;
+            continue;
+        }
+        if (str.find("info") == 0)
+        {
+            std::cout << bcui.ResetInfo() << std::endl;
             continue;
         }
         try

@@ -30,6 +30,8 @@ public:
 
 	// Prints exit on Console
 	const std::string UI_Exit();
+
+	const std::string ResetInfo();
 };
 
 #endif

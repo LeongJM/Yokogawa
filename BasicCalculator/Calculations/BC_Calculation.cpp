@@ -8,6 +8,7 @@
 #include "../ErrorHandling/BC_ErrorHandling.h"
 #include <limits>
 #include <cmath>
+#include <algorithm>
 
 //#include <iostream> // remove
 
@@ -31,7 +32,7 @@ BC_Calculator::~BC_Calculator()
 void BC_Calculator::AddOperations()
 {
 	// Can add all operations here
-	_operations->emplace('+', [](const long double& v1, const long double& v2)
+	AddOperation('+', [](const long double& v1, const long double& v2)
 		{
 			// Checks for overflow
 			if (v1 > 0 && v2 > 0 && std::numeric_limits<long double>::max() - v1 < v2)
@@ -40,7 +41,7 @@ void BC_Calculator::AddOperations()
 			}
 			return v1 + v2;
 		});
-	_operations->emplace('-', [](const long double& v1, const long double& v2)
+	AddOperation('-', [](const long double& v1, const long double& v2)
 		{
 			if (v1 < 0 && v2 < 0 && std::numeric_limits<long double>::min() - v1 < v2)
 			{
@@ -48,7 +49,7 @@ void BC_Calculator::AddOperations()
 			}
 			return v1 - v2;
 		});
-	_operations->emplace('*', [](const long double& v1, const long double& v2)
+	AddOperation('*', [](const long double& v1, const long double& v2)
 		{
 			if (((v1 > 0 && v2 > 0) || (v1 < 0 && v2 < 0)) && std::numeric_limits<long double>::max() / v1 < v2)
 			{
@@ -60,7 +61,7 @@ void BC_Calculator::AddOperations()
 			}
 			return v1 * v2;
 		});
-	_operations->emplace('/', [](const long double& v1, const long double& v2)
+	AddOperation('/', [](const long double& v1, const long double& v2)
 		{
 			// Checks for Divide by 0
 			if (v2 == 0)
@@ -69,7 +70,7 @@ void BC_Calculator::AddOperations()
 			}
 			return v1 / v2;
 		});
-	_operations->emplace('^', [](const long double& v1, const long double& v2)
+	AddOperation('^', [](const long double& v1, const long double& v2)
 		{
 			// Checks for overflow
 			long double finalResult = std::powl(v1, v2);
@@ -79,7 +80,7 @@ void BC_Calculator::AddOperations()
 			}
 			return finalResult;
 		});
-	_operations->emplace('~', [](const long double& v1, const long double& v2)
+	AddOperation('~', [](const long double& v1, const long double& v2)
 		{
 			// Checks for Root by 0
 			if (v2 == 0)
@@ -94,6 +95,11 @@ void BC_Calculator::AddOperations()
 
 			return finalResult;
 		});
+}
+
+bool BC_Calculator::AddOperation(char op, OpFunc fn)
+{
+	return _operations->emplace(op, fn).second;
 }
 
 BC_Calculator::CTokens BC_Calculator::Tokenize(const std::string& str)
@@ -137,7 +143,13 @@ long double BC_Calculator::Calculate(const std::string& str)
 		val2 = std::stold(std::get<2>(tokens));
 
 		// Uses stold's own checks, so it discards whitespaces and any unnecessary values
-		// Add additional checking in to throw if it fails?
+		// Want to have decimals and exponents
+		if (!std::all_of(std::get<0>(tokens).begin(), std::get<0>(tokens).end(), [](const char& c) { return::isdigit(c) || c == 'e' || c == '.'; })
+			|| !std::all_of(std::get<2>(tokens).begin(), std::get<2>(tokens).end(), [](const char& c) { return::isdigit(c) || c == 'e' || c == '.'; }))
+		{
+			throw BC_Exception(ErrorType::InvalidArg, "");
+		}
+		
 	}
 	catch (const std::invalid_argument& e) // Cannot convert to any digits at all
 	{

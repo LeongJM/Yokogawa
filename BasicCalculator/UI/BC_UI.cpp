@@ -18,11 +18,15 @@ const std::string BC_ConsoleUI::UI_Introduction()
 {
 	std::string ret = (!_first ? 
 		"Hello! This is a calculator Program."
-		"\nPlease enter \"exit\" to exit this program."
 		"\nYou may use Addition [+], Subtraction [-], Multiplication [*], Division [/], Power[^], and Root[~]."
 		"\nExamples: 1+1, 2-1, 3*2, 4^2, 5~2"
-		"\nYou may also use Decimals and Exponents. Whitespaces may be used to separate Input values."
-		"\nExamples: 1.5e10 * 3"
+		"\nYou may also use Decimals and Exponents."
+		"\nExample: 1.543e10*3"
+		"\nPlease enter \"history\" to view all previous calculations."
+		"\nYou may enter \"history [number]\" to view the last [numbers] of calculations."
+		"\nExample: history 3"
+		"\nPlease enter \"info\" to repeat this introduction."
+		"\nPlease enter \"exit\" to exit this program."
 		"\nPlease enter your next calculation: " 
 		: 
 		"Please enter your next calculation: ");
@@ -57,5 +61,11 @@ const std::string BC_ConsoleUI::UI_History(const std::vector<std::pair<std::stri
 
 const std::string BC_ConsoleUI::UI_Exit()
 {
-	return "Ending Calculator Program.";
+	return "Exiting Calculator Program.";
+}
+
+const std::string BC_ConsoleUI::ResetInfo()
+{
+	_first = false;
+	return "==============================\n";
 }

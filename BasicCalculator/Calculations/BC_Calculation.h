@@ -18,7 +18,8 @@
 class BC_Calculator
 {
 	typedef std::tuple<std::string, std::string, std::string> CTokens;
-	typedef std::map<char, std::function<long double(const long double&, const long double&)>> Operators;
+	typedef std::function<long double(const long double&, const long double&)> OpFunc;
+	typedef std::map<char, OpFunc> Operators;
 	
 	std::vector<std::pair<std::string, long double>> _history;
 
@@ -26,8 +27,11 @@ class BC_Calculator
 
 	// Adds all operations
 	void AddOperations();
+	// Could probably move to Public if want others to add more funcs
+	bool AddOperation(char op, OpFunc fn);
 	// Tokenizes the full string input into three parts
 	CTokens Tokenize(const std::string& str);
+
 public:
 	BC_Calculator();
 	~BC_Calculator();
