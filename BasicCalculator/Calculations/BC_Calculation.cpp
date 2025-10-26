@@ -135,7 +135,7 @@ long double BC_Calculator::Calculate(const std::string& str)
 	}
 
 	std::string opVal = std::get<1>(tokens);
-	long double val1 = 0.0f, val2 = 0.0f;
+	long double val1 = 0.0l, val2 = 0.0l;
 
 	try
 	{
