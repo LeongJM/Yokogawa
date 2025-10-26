@@ -31,7 +31,7 @@ int main()
             {
                 maxView = std::stoi(num);
             }
-            catch (const std::exception& e)
+            catch (const std::exception& e) // Catches if no number or bad input given
             {
                 //std::cout << "Invalid number." << std::endl;
                 //continue;

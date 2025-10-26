@@ -11,26 +11,21 @@
 #include <vector>
 #include <string>
 #include <tuple>
-
-enum class OperationType : size_t
-{
-	Undefined = 255,
-	Plus = 0,
-	Minus,
-	Multiply,
-	Divide,
-	Power,
-	Root,
-};
-
-OperationType ConvertStringToOp(const std::string& o);
+#include <map>
+#include <functional>
+#include <memory>
 
 class BC_Calculator
 {
 	typedef std::tuple<std::string, std::string, std::string> CTokens;
+	typedef std::map<char, std::function<long double(const long double&, const long double&)>> Operators;
 	
 	std::vector<std::pair<std::string, long double>> _history;
 
+	static std::unique_ptr<Operators> _operations;
+
+	// Adds all operations
+	void AddOperations();
 	// Tokenizes the full string input into three parts
 	CTokens Tokenize(const std::string& str);
 public:

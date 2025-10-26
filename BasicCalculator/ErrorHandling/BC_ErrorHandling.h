@@ -10,7 +10,7 @@
 #include <stdexcept> 
 #include <string>
 
-enum class ErrorType: size_t
+enum class ErrorType : size_t
 {
 	InvalidArg = 0,
 	OutOfRange,

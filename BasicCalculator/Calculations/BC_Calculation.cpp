@@ -11,9 +11,16 @@
 
 //#include <iostream> // remove
 
+std::unique_ptr<BC_Calculator::Operators> BC_Calculator::_operations = nullptr;
+
 BC_Calculator::BC_Calculator()
 {
-
+	// Create new instance
+	if (_operations == nullptr)
+	{
+		_operations = std::make_unique<Operators>();
+		AddOperations();
+	}
 }
 
 BC_Calculator::~BC_Calculator()
@@ -21,10 +28,86 @@ BC_Calculator::~BC_Calculator()
 
 }
 
+void BC_Calculator::AddOperations()
+{
+	// Can add all operations here
+	_operations->emplace('+', [](const long double& v1, const long double& v2)
+		{
+			// Checks for overflow
+			if (v1 > 0 && v2 > 0 && std::numeric_limits<long double>::max() - v1 < v2)
+			{
+				throw BC_Exception(ErrorType::OutOfRange, "");
+			}
+			return v1 + v2;
+		});
+	_operations->emplace('-', [](const long double& v1, const long double& v2)
+		{
+			if (v1 < 0 && v2 < 0 && std::numeric_limits<long double>::min() - v1 < v2)
+			{
+				throw BC_Exception(ErrorType::OutOfRange, "");
+			}
+			return v1 - v2;
+		});
+	_operations->emplace('*', [](const long double& v1, const long double& v2)
+		{
+			if (((v1 > 0 && v2 > 0) || (v1 < 0 && v2 < 0)) && std::numeric_limits<long double>::max() / v1 < v2)
+			{
+				throw BC_Exception(ErrorType::OutOfRange, "");
+			}
+			else if (((v1 < 0 && v2 > 0) || (v1 > 0 && v2 < 0)) && std::numeric_limits<long double>::min() / v1 < v2)
+			{
+				throw BC_Exception(ErrorType::OutOfRange, "");
+			}
+			return v1 * v2;
+		});
+	_operations->emplace('/', [](const long double& v1, const long double& v2)
+		{
+			// Checks for Divide by 0
+			if (v2 == 0)
+			{
+				throw BC_Exception(ErrorType::DivideByZero, "");
+			}
+			return v1 / v2;
+		});
+	_operations->emplace('^', [](const long double& v1, const long double& v2)
+		{
+			// Checks for overflow
+			long double finalResult = std::powl(v1, v2);
+			if (finalResult == HUGE_VALL || finalResult == -HUGE_VALL)
+			{
+				throw BC_Exception(ErrorType::OutOfRange, "");
+			}
+			return finalResult;
+		});
+	_operations->emplace('~', [](const long double& v1, const long double& v2)
+		{
+			// Checks for Root by 0
+			if (v2 == 0)
+			{
+				throw BC_Exception(ErrorType::InvalidArg, "");
+			}
+			long double finalResult = std::powl(v1, 1 / v2);
+			if (std::isnan(finalResult))
+			{
+				throw BC_Exception(ErrorType::OutOfRange, "");
+			}
+
+			return finalResult;
+		});
+}
+
 BC_Calculator::CTokens BC_Calculator::Tokenize(const std::string& str)
 {
 	std::string substr = str.substr(1); // Ignore first digit, all operations must begin from 2nd digit onwards
-	std::size_t found = substr.find_first_of("+-*/^~"); // Find operation char
+
+	// Can theoretically add/remove symbols during runtime so left here instead of pre-defining
+	std::string allOpSymbols;
+	for (Operators::value_type i : *_operations)
+	{
+		allOpSymbols += i.first;
+	}
+
+	std::size_t found = substr.find_first_of(allOpSymbols); // Find operation char
 	if (found == std::string::npos)
 	{
 		throw BC_Exception(ErrorType::InvalidArg, ""); //Cannot find any
@@ -67,65 +150,15 @@ long double BC_Calculator::Calculate(const std::string& str)
 
 	long double finalResult = 0.0f;
 
-	// Operations here
-	switch (ConvertStringToOp(opVal))
+	// Runs the correct operation
+	Operators::iterator it = _operations->find(opVal[0]);
+	if (it == _operations->end())
 	{
-	case OperationType::Plus:
-		// Checks for overflow
-		if (val1 > 0 && val2 > 0 && std::numeric_limits<long double>::max() - val1 < val2)
-		{
-			throw BC_Exception(ErrorType::OutOfRange, "");
-		}
-		finalResult = val1 + val2;
-		break;
-	case OperationType::Minus:
-		if (val1 < 0 && val2 < 0 && std::numeric_limits<long double>::min() - val1 < val2)
-		{
-			throw BC_Exception(ErrorType::OutOfRange, "");
-		}
-		finalResult = val1 - val2;
-		break;
-	case OperationType::Multiply:
-		if (((val1 > 0 && val2 > 0) || (val1 < 0 && val2 < 0)) && std::numeric_limits<long double>::max() / val1 < val2)
-		{
-			throw BC_Exception(ErrorType::OutOfRange, "");
-		}
-		else if (((val1 < 0 && val2 > 0) || (val1 > 0 && val2 < 0)) && std::numeric_limits<long double>::min() / val1 < val2)
-		{
-			throw BC_Exception(ErrorType::OutOfRange, "");
-		}
-		finalResult = val1 * val2;
-		break;
-	case OperationType::Divide:
-		// Checks for Divide by 0
-		if (val2 == 0)
-		{
-			throw BC_Exception(ErrorType::DivideByZero, "");
-		}
-		finalResult = val1 / val2;
-		break;
-	case OperationType::Power:
-		// Checks for overflow
-		finalResult = std::powl(val1, val2);
-		if (finalResult == HUGE_VALL || finalResult == -HUGE_VALL)
-		{
-			throw BC_Exception(ErrorType::OutOfRange, "");
-		}
-		break;
-	case OperationType::Root:
-		// Checks for Root by 0
-		if (val2 == 0)
-		{
-			throw BC_Exception(ErrorType::InvalidArg, "");
-		}
-		finalResult = std::powl(val1, 1/val2);
-		if (std::isnan(finalResult))
-		{
-			throw BC_Exception(ErrorType::OutOfRange, "");
-		}
-		break;
-	default:
-		break;
+		throw BC_Exception(ErrorType::InvalidArg, "");
+	}
+	else
+	{
+		finalResult = it->second(val1, val2);
 	}
 
 	// Add to History
@@ -149,33 +182,4 @@ std::vector<std::pair<std::string, long double>> BC_Calculator::GetHistory(size_
 void BC_Calculator::AddToHistory(std::string input, long double output)
 {
 	_history.push_back(std::make_pair(input, output));
-}
-
-OperationType ConvertStringToOp(const std::string& o)
-{
-	if (o == "+")
-	{
-		return OperationType::Plus;
-	}
-	else if (o == "-")
-	{
-		return OperationType::Minus;
-	}
-	else if (o == "*")
-	{
-		return OperationType::Multiply;
-	}
-	else if (o == "/")
-	{
-		return OperationType::Divide;
-	}
-	else if (o == "^")
-	{
-		return OperationType::Power;
-	}
-	else if (o == "~")
-	{
-		return OperationType::Root;
-	}
-	return OperationType::Undefined;
 }
