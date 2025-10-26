@@ -139,25 +139,27 @@ long double BC_Calculator::Calculate(const std::string& str)
 
 	try
 	{
-		val1 = std::stold(std::get<0>(tokens));
-		val2 = std::stold(std::get<2>(tokens));
-
 		// Uses stold's own checks, so it discards whitespaces and any unnecessary values
 		// Want to have decimals and exponents
-		if (!std::all_of(std::get<0>(tokens).begin(), std::get<0>(tokens).end(), [](const char& c) { return::isdigit(c) || c == 'e' || c == '.'; })
-			|| !std::all_of(std::get<2>(tokens).begin(), std::get<2>(tokens).end(), [](const char& c) { return::isdigit(c) || c == 'e' || c == '.'; }))
+		// Only first value gets to be negative number
+		std::string token1 = std::get<0>(tokens); std::string token2 = std::get<2>(tokens);
+		if (!std::all_of(token1.begin() + (token1[0] == '-'? 1 : 0), token1.end(), [](const char& c) { return::isdigit(c) || c == 'e' || c == '.'; })
+			|| !std::all_of(token2.begin(), token2.end(), [](const char& c) { return::isdigit(c) || c == 'e' || c == '.'; }))
 		{
 			throw BC_Exception(ErrorType::InvalidArg, "");
 		}
+
+		val1 = std::stold(token1);
+		val2 = std::stold(token2);
 		
 	}
 	catch (const std::invalid_argument& e) // Cannot convert to any digits at all
 	{
-		throw BC_Exception(ErrorType::InvalidArg, e.what());
+		throw BC_Exception(ErrorType::InvalidArg, "");
 	}
 	catch (const std::out_of_range& e) // Out of range
 	{
-		throw BC_Exception(ErrorType::OutOfRange, e.what());
+		throw BC_Exception(ErrorType::OutOfRange, "");
 	}
 
 	long double finalResult = 0.0f;
