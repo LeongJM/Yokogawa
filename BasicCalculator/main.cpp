@@ -18,14 +18,25 @@ int main()
         std::string str;
         std::cout << bcui.UI_Introduction();
         std::getline(std::cin, str);
-        if (str == "exit")
+        if (str.find("exit") != std::string::npos)
         {
             std::cout << bcui.UI_Exit() << std::endl;
             break;
         }
-        if (str == "history")
+        if (str.find("history") != std::string::npos)
         {
-            std::cout << bcui.UI_History(bccc.GetHistory(0)) << std::endl;
+            std::string num = str.substr(7);
+            size_t maxView = 0;
+            try
+            {
+                maxView = std::stoi(num);
+            }
+            catch (const std::exception& e)
+            {
+                //std::cout << "Invalid number." << std::endl;
+                //continue;
+            }
+            std::cout << bcui.UI_History(bccc.GetHistory(maxView)) << std::endl;
             continue;
         }
         try

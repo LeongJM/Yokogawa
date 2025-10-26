@@ -40,12 +40,8 @@ public:
 	// Calculates a result with a given input string
 	long double Calculate(const std::string& str);
 
-	// Returns the last calculated result
-	long double ReturnLastResult() const;
-
 	// Gets the full History, or a single calculation and result
-	const std::vector<std::pair<std::string, long double>>& GetHistory() const;
-	const std::pair<std::string, long double> GetHistory(int index = 0) const;
+	std::vector<std::pair<std::string, long double>> GetHistory(size_t maxCalcs = 0) const;
 
 	void AddToHistory(std::string input, long double output);
 	

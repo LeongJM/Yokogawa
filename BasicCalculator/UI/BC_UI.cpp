@@ -36,16 +36,17 @@ const std::string BC_ConsoleUI::UI_Failure(const BC_Exception& e) const
 
 const std::string BC_ConsoleUI::UI_History(const std::vector<std::pair<std::string, long double>> history)
 {
-	return std::string();
-}
-
-const std::string BC_ConsoleUI::UI_History(const std::pair<std::string, long double> history)
-{
-	if (history.first != "")
+	if (history.size() > 0)
 	{
-		return "Calculation: " + history.first + "=" + std::to_string(history.second);
+		std::string calcStr = { "Calculations: " };
+		for (std::pair<std::string, long double> h : history)
+		{
+			calcStr += '\n' + h.first + "=" + std::to_string(h.second);
+		}
+		calcStr += +"\n==============================";
+		return calcStr;
 	}
-	return "No Calculations Found!";
+	return "No History found!";
 }
 
 const std::string BC_ConsoleUI::UI_Exit()

@@ -26,7 +26,6 @@ public:
 	const std::string UI_Failure(const BC_Exception& e) const;
 	// Displays History
 	const std::string UI_History(const std::vector<std::pair<std::string, long double>> history);
-	const std::string UI_History(const std::pair<std::string, long double> history);
 
 
 	// Prints exit on Console

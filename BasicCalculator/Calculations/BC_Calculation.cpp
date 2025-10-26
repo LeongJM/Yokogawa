@@ -137,23 +137,13 @@ long double BC_Calculator::Calculate(const std::string& str)
 	return finalResult;
 }
 
-long double BC_Calculator::ReturnLastResult() const
+std::vector<std::pair<std::string, long double>> BC_Calculator::GetHistory(size_t maxCalcs) const
 {
-	return _history[_history.size()-1].second;
-}
-
-const std::vector<std::pair<std::string, long double>>& BC_Calculator::GetHistory() const
-{
-	return std::vector<std::pair<std::string, long double>>();
-}
-
-const std::pair<std::string, long double> BC_Calculator::GetHistory(int howManyPrev) const
-{
-	if (_history.size() > 0)
+	if (maxCalcs <= 0)
 	{
-		return _history[_history.size() - 1 - howManyPrev];
+		return std::vector<std::pair<std::string, long double>>(_history.rbegin(), _history.rend());
 	}
-	return {};
+	return std::vector<std::pair<std::string, long double>>(_history.rbegin(), _history.rbegin() + std::min(maxCalcs, _history.size()));
 }
 
 void BC_Calculator::AddToHistory(std::string input, long double output)
