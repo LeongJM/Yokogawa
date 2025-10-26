@@ -23,6 +23,11 @@ int main()
             std::cout << bcui.UI_Exit() << std::endl;
             break;
         }
+        if (str == "history")
+        {
+            std::cout << bcui.UI_History(bccc.GetHistory(0)) << std::endl;
+            continue;
+        }
         try
         {
             std::cout << bcui.UI_DisplayResult(bccc.Calculate(str)) << std::endl;

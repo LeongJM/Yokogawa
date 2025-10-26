@@ -10,7 +10,7 @@
 #include <stdexcept> 
 #include <string>
 
-enum ErrorType: size_t
+enum class ErrorType: size_t
 {
 	InvalidArg = 0,
 	OutOfRange,
@@ -28,13 +28,13 @@ public:
 	{ 
 		switch (_type)
 		{
-		case InvalidArg:
+		case ErrorType::InvalidArg:
 			return "Invalid Argument";
 			break;
-		case OutOfRange:
+		case ErrorType::OutOfRange:
 			return "Out Of Range";
 			break;
-		case DivideByZero:
+		case ErrorType::DivideByZero:
 			return "Divide By Zero";
 			break;
 		default:

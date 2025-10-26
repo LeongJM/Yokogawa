@@ -124,23 +124,41 @@ long double BC_Calculator::Calculate(const std::string& str)
 	default:
 		break;
 	}
+
+	// Add to History
+	std::string insert = std::to_string(val1) + std::get<1>(tokens);
+	if (ConvertStringToOp(opVal) != OperationType::SquareRoot)
+	{
+		insert += std::to_string(val2);
+	}
+
+	AddToHistory(insert, finalResult);
 	
 	return finalResult;
 }
 
 long double BC_Calculator::ReturnLastResult() const
 {
-	return 0.0;
+	return _history[_history.size()-1].second;
 }
 
 const std::vector<std::pair<std::string, long double>>& BC_Calculator::GetHistory() const
 {
-	return _history;
+	return std::vector<std::pair<std::string, long double>>();
 }
 
 const std::pair<std::string, long double> BC_Calculator::GetHistory(int howManyPrev) const
 {
-	return std::pair<std::string, long double>{ "", 0.0f };
+	if (_history.size() > 0)
+	{
+		return _history[_history.size() - 1 - howManyPrev];
+	}
+	return {};
+}
+
+void BC_Calculator::AddToHistory(std::string input, long double output)
+{
+	_history.push_back(std::make_pair(input, output));
 }
 
 OperationType ConvertStringToOp(const std::string& o)

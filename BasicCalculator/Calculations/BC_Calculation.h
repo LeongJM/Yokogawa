@@ -7,7 +7,8 @@
 #ifndef BC_CALCULATION_H
 #define BC_CALCULATION_H
 
-#include <queue>
+#include <array>
+#include <vector>
 #include <string>
 #include <tuple>
 
@@ -45,6 +46,8 @@ public:
 	// Gets the full History, or a single calculation and result
 	const std::vector<std::pair<std::string, long double>>& GetHistory() const;
 	const std::pair<std::string, long double> GetHistory(int index = 0) const;
+
+	void AddToHistory(std::string input, long double output);
 	
 };
 

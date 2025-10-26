@@ -41,7 +41,11 @@ const std::string BC_ConsoleUI::UI_History(const std::vector<std::pair<std::stri
 
 const std::string BC_ConsoleUI::UI_History(const std::pair<std::string, long double> history)
 {
-	return std::string();
+	if (history.first != "")
+	{
+		return "Calculation: " + history.first + "=" + std::to_string(history.second);
+	}
+	return "No Calculations Found!";
 }
 
 const std::string BC_ConsoleUI::UI_Exit()
