@@ -27,6 +27,10 @@ public:
 	// Displays History
 	const std::string UI_History(const std::vector<std::pair<std::string, long double>> history);
 	const std::string UI_History(const std::pair<std::string, long double> history);
+
+
+	// Prints exit on Console
+	const std::string UI_Exit();
 };
 
 #endif

@@ -16,11 +16,11 @@ int main()
     while (true)
     {
         std::string str;
-        std::cout << bcui.UI_Introduction() << std::endl;
+        std::cout << bcui.UI_Introduction();
         std::getline(std::cin, str);
         if (str == "exit")
         {
-            std::cout << "Ending Calculator Program." << std::endl;
+            std::cout << bcui.UI_Exit() << std::endl;
             break;
         }
         try
