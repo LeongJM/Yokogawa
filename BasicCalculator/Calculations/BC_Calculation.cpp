@@ -24,29 +24,39 @@ BC_Calculator::~BC_Calculator()
 BC_Calculator::CTokens BC_Calculator::Tokenize(const std::string& str)
 {
 	std::string substr = str.substr(1); //Ignore first digit, all operations must begin from 2nd digit onwards
-	std::size_t found = str.find_first_of("+-*/^e~");
+	std::size_t found = str.find_first_of("+-*/^~");
 
 	return std::make_tuple(str.substr(0, found), str.substr(found, 1), str.substr(found+1));
 }
 
 long double BC_Calculator::Calculate(const std::string& str)
 {
-	CTokens tokens = Tokenize(str);
+	CTokens tokens;
+	try
+	{
+		 tokens = Tokenize(str);
+	}
+	catch (const std::exception& e)
+	{
+		throw BC_Exception(ErrorType::InvalidArg, e.what());
+	}
 	std::string opVal = std::get<1>(tokens);
 
-	std::cout << std::get<0>(tokens) << " : " << std::get<1>(tokens) << " : " << std::get<2>(tokens) << std::endl;
+	//std::cout << std::get<0>(tokens) << " : " << std::get<1>(tokens) << " : " << std::get<2>(tokens) << std::endl;
 
 	long double val1 = 0.0f, val2 = 0.0f;
 	try
 	{
 		val1 = std::stold(std::get<0>(tokens)); 
 		val2 = std::stold(std::get<2>(tokens));
+
+		//std::cout << val1 << " : " << val2 << std::endl;
 	}
-	catch (const std::invalid_argument& e)
+	catch (const std::invalid_argument& e) // Cannot convert to any digits at all
 	{
 		throw BC_Exception(ErrorType::InvalidArg, e.what());
 	}
-	catch (const std::out_of_range& e)
+	catch (const std::out_of_range& e) // Out of range
 	{
 		throw BC_Exception(ErrorType::OutOfRange, e.what());
 	}
@@ -89,9 +99,6 @@ long double BC_Calculator::Calculate(const std::string& str)
 		break;
 	case OperationType::Power:
 		return powl(val1, val2);
-		break;
-	case OperationType::Exponent:
-		return expl(val1);
 		break;
 	case OperationType::SquareRoot:
 		return sqrtl(val1);
@@ -140,10 +147,6 @@ OperationType ConvertStringToOp(const std::string& o)
 	else if (o == "^")
 	{
 		return OperationType::Power;
-	}
-	else if (o == "e")
-	{
-		return OperationType::Exponent;
 	}
 	else if (o == "~")
 	{

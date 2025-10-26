@@ -17,7 +17,7 @@ int main()
     {
         std::string str;
         std::cout << bcui.UI_Introduction() << std::endl;
-        std::cin >> str;
+        std::getline(std::cin, str);
         if (str == "exit")
         {
             std::cout << "Ending Calculator Program." << std::endl;
@@ -25,13 +25,13 @@ int main()
         }
         try
         {
-            bcui.UI_DisplayResult(bccc.Calculate(str));
+            std::cout << bcui.UI_DisplayResult(bccc.Calculate(str)) << std::endl;
         }
         catch (const BC_Exception& e)
         {
-            bcui.UI_Failure(e);
+            std::cout << bcui.UI_Failure(e) << std::endl;
         }
     }
-
+        
     return 0;
 }

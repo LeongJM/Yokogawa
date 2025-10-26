@@ -21,12 +21,12 @@ public:
 	// Prints intro on Console
 	const std::string UI_Introduction();
 	// Displays final result on Console
-	const std::string UI_DisplayResult(double result);
+	const std::string UI_DisplayResult(long double result);
 	// Displays error on Console
 	const std::string UI_Failure(const BC_Exception& e) const;
 	// Displays History
-	const std::string UI_History(const std::vector<std::pair<std::string, double>> history);
-	const std::string UI_History(const std::pair<std::string, double> history);
+	const std::string UI_History(const std::vector<std::pair<std::string, long double>> history);
+	const std::string UI_History(const std::pair<std::string, long double> history);
 };
 
 #endif

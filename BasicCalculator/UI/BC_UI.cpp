@@ -21,7 +21,7 @@ const std::string BC_ConsoleUI::UI_Introduction()
 	return ret;
 }
 
-const std::string BC_ConsoleUI::UI_DisplayResult(double result)
+const std::string BC_ConsoleUI::UI_DisplayResult(long double result)
 {
 	return "Result: " + std::to_string(result);
 }
@@ -31,12 +31,12 @@ const std::string BC_ConsoleUI::UI_Failure(const BC_Exception& e) const
 	return "Failure: " + std::string(e.type()) + " " + std::string(e.what());
 }
 
-const std::string BC_ConsoleUI::UI_History(const std::vector<std::pair<std::string, double>> history)
+const std::string BC_ConsoleUI::UI_History(const std::vector<std::pair<std::string, long double>> history)
 {
 	return std::string();
 }
 
-const std::string BC_ConsoleUI::UI_History(const std::pair<std::string, double> history)
+const std::string BC_ConsoleUI::UI_History(const std::pair<std::string, long double> history)
 {
 	return std::string();
 }

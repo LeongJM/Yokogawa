@@ -19,7 +19,6 @@ enum class OperationType : size_t
 	Multiply,
 	Divide,
 	Power,
-	Exponent,
 	SquareRoot,
 };
 
