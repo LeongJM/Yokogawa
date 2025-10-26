@@ -20,7 +20,7 @@ enum class OperationType : size_t
 	Multiply,
 	Divide,
 	Power,
-	SquareRoot,
+	Root,
 };
 
 OperationType ConvertStringToOp(const std::string& o);

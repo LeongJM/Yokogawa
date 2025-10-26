@@ -17,9 +17,15 @@ BC_ConsoleUI::~BC_ConsoleUI()
 const std::string BC_ConsoleUI::UI_Introduction()
 {
 	std::string ret = (!_first ? 
-		"Please enter \"exit\" to exit this program.\nPlease Enter your calculation. eg. 123+456 : " 
+		"Hello! This is a primitive calculator Program."
+		"\nPlease enter \"exit\" to exit this program."
+		"\nYou may use Addition [+], Subtraction [-], Multiplication [*], Division [/], Power[^], and Root[~]."
+		"\nExamples: 1+1, 2-1, 3*2, 4^2, 5~2"
+		"\nYou may also use Decimals and Exponents. Whitespaces may be used to separate Input values."
+		"\nExamples: 1.5e10 * 3"
+		"\nPlease enter your next calculation: " 
 		: 
-		"Please enter your next calculation. eg. 123+456: ");
+		"Please enter your next calculation: ");
 	_first = true;
 	return ret;
 }

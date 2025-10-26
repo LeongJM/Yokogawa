@@ -9,7 +9,7 @@
 #include <limits>
 #include <cmath>
 
-#include <iostream> // remove
+//#include <iostream> // remove
 
 BC_Calculator::BC_Calculator()
 {
@@ -27,7 +27,7 @@ BC_Calculator::CTokens BC_Calculator::Tokenize(const std::string& str)
 	std::size_t found = substr.find_first_of("+-*/^~"); // Find operation char
 	if (found == std::string::npos)
 	{
-		throw BC_Exception(ErrorType::InvalidArg, "Unknown operation"); //Cannot find any
+		throw BC_Exception(ErrorType::InvalidArg, ""); //Cannot find any
 	}
 
 	return std::make_tuple(str.substr(0, found + 1), str.substr(found + 1, 1), str.substr(found + 2));
@@ -52,11 +52,10 @@ long double BC_Calculator::Calculate(const std::string& str)
 	try
 	{
 		val1 = std::stold(std::get<0>(tokens));
+		val2 = std::stold(std::get<2>(tokens));
 
-		if (ConvertStringToOp(opVal) != OperationType::SquareRoot)
-		{
-			val2 = std::stold(std::get<2>(tokens));
-		}
+		// Uses stold's own checks, so it discards whitespaces and any unnecessary values
+		// Add additional checking in to throw if it fails?
 
 		//std::cout << val1 << " : " << val2 << std::endl;
 	}
@@ -78,32 +77,32 @@ long double BC_Calculator::Calculate(const std::string& str)
 		// Check if addition will cause overflow
 		if (val1 > 0 && val2 > 0 && std::numeric_limits<long double>::max() - val1 < val2)
 		{
-			throw BC_Exception(ErrorType::OutOfRange, "+ OOR");
+			throw BC_Exception(ErrorType::OutOfRange, "");
 		}
 		finalResult = val1 + val2;
 		break;
 	case OperationType::Minus:
 		if (val1 < 0 && val2 < 0 && std::numeric_limits<long double>::min() - val1 < val2)
 		{
-			throw BC_Exception(ErrorType::OutOfRange, "- OOR");
+			throw BC_Exception(ErrorType::OutOfRange, "");
 		}
 		finalResult = val1 - val2;
 		break;
 	case OperationType::Multiply:
 		if (((val1 > 0 && val2 > 0) || (val1 < 0 && val2 < 0)) && std::numeric_limits<long double>::max() / val1 < val2)
 		{
-			throw BC_Exception(ErrorType::OutOfRange, "* OOR");
+			throw BC_Exception(ErrorType::OutOfRange, "");
 		}
 		else if (((val1 < 0 && val2 > 0) || (val1 > 0 && val2 < 0)) && std::numeric_limits<long double>::min() / val1 < val2)
 		{
-			throw BC_Exception(ErrorType::OutOfRange, "* -OOR");
+			throw BC_Exception(ErrorType::OutOfRange, "");
 		}
 		finalResult = val1 * val2;
 		break;
 	case OperationType::Divide:
 		if (val2 == 0)
 		{
-			throw BC_Exception(ErrorType::DivideByZero, "/ DVZ");
+			throw BC_Exception(ErrorType::DivideByZero, "");
 		}
 		finalResult = val1 / val2;
 		break;
@@ -111,14 +110,18 @@ long double BC_Calculator::Calculate(const std::string& str)
 		finalResult = std::powl(val1, val2);
 		if (finalResult == HUGE_VALL || finalResult == -HUGE_VALL)
 		{
-			throw BC_Exception(ErrorType::OutOfRange, "^ POW");
+			throw BC_Exception(ErrorType::OutOfRange, "");
 		}
 		break;
-	case OperationType::SquareRoot:
-		finalResult = std::sqrtl(val1);
+	case OperationType::Root:
+		if (val2 == 0)
+		{
+			throw BC_Exception(ErrorType::InvalidArg, "");
+		}
+		finalResult = std::powl(val1, 1/val2);
 		if (std::isnan(finalResult))
 		{
-			throw BC_Exception(ErrorType::OutOfRange, "~ SQRT");
+			throw BC_Exception(ErrorType::OutOfRange, "");
 		}
 		break;
 	default:
@@ -126,11 +129,7 @@ long double BC_Calculator::Calculate(const std::string& str)
 	}
 
 	// Add to History
-	std::string insert = std::to_string(val1) + std::get<1>(tokens);
-	if (ConvertStringToOp(opVal) != OperationType::SquareRoot)
-	{
-		insert += std::to_string(val2);
-	}
+	std::string insert = std::to_string(val1) + std::get<1>(tokens) + std::to_string(val2);
 
 	AddToHistory(insert, finalResult);
 	
@@ -175,7 +174,7 @@ OperationType ConvertStringToOp(const std::string& o)
 	}
 	else if (o == "~")
 	{
-		return OperationType::SquareRoot;
+		return OperationType::Root;
 	}
 	return OperationType::Undefined;
 }

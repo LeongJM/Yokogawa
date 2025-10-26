@@ -29,16 +29,16 @@ public:
 		switch (_type)
 		{
 		case ErrorType::InvalidArg:
-			return "Invalid Argument";
+			return "Invalid Arguments.";
 			break;
 		case ErrorType::OutOfRange:
-			return "Out Of Range";
+			return "Out Of Range.";
 			break;
 		case ErrorType::DivideByZero:
-			return "Divide By Zero";
+			return "Divided By Zero.";
 			break;
 		default:
-			return "Undefined";
+			return "Undefined.";
 			break;
 		}
 	}
