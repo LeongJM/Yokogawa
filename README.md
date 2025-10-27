@@ -5,10 +5,17 @@ This project is the Developement process of a Calculator program for Yokogawa In
 
 ## Instructions
 Calculations are done using a single string:\
-eg. 100+200
+eg. 100+200 ✔\
+eg. 1*5 ✔
 
-e is allowed as part of the exponents:\
-eg. 1e10+100
+e and decimals are allowed:\
+eg. 1e10+100 ✔\
+eg. 1.15+20 ✔\
+eg. 1.15e20+20 ✔
+
+No whitespaces or invalid non-numerics are allowed:\
+eg. 1 + 2 ❌\
+eg. 1a+3 ❌
 
 All available operations:
 - Plus (+)
@@ -16,7 +23,12 @@ All available operations:
 - Multiply (*)
 - Divide (/)
 - Power (^)
-- Square Root (~)\
+- Square Root (~)
+
+Special instructions are:
+- info
+- history [number]
+- exit
 
 Initial Window
 <img width="979" height="512" alt="1" src="https://github.com/user-attachments/assets/19b0f69b-8214-4d7d-a6bf-ff504338ad5a"/>
@@ -27,12 +39,12 @@ All Basic Operations
 ## Testing
 Initial setup:
 - Basic environment testing
-  * Building Project and Solution Files
-  * Basic class framework
-- std::getline testing
-  * Testing console getline being input
+  * Building Project and Solution Files.
+  * Basic class framework - Three classes - UI, Calculation, Error Handling.
+- Basic functionality testing
+  * Testing console std::getline or std::cin input.
 - UI class console output testing
-  * Checking if console is outputting correct values from UI Class
+  * Checking if console is outputting correct values from UI Class.
 
 Main Calculations Testing:
 - Tokenization
@@ -47,6 +59,7 @@ Main Calculations Testing:
   * Infinity/NaN.
   * Divide by Zero.
   * Invalid arguments.
+  * Error Handling properly being properly sent out and viewable.
 - History
   * Storing of all History Data.
   * Output of History Data.
@@ -58,9 +71,10 @@ Polish:
 - Further stress testing with Individual operations:
   * Large numbers with large numbers, small numbers with small numbers.
   * Small decimal values.
+- Polish of UI console output.
 
 ## Known Issues
-Calculating with a huge number and small number causes potential issues leading to inaccurate calculations.
-Decimals are always printed at 6 decimal places (non-dynamic decimal string outputs).
+- Calculating with a huge number and small number causes potential issues leading to inaccurate calculations.
+- Decimals are always printed at 6 decimal places (non-dynamic decimal string outputs).
 
 
