@@ -1,7 +1,7 @@
 # Yokogawa - Basic Calculator - C++
 
 ## Brief Project Description
-This project is the Developement process of a Calculator program for Yokogawa Interview.
+This project is the Development process of a Calculator program for Yokogawa Interview.
 
 ## Instructions
 Calculations are done using a single string:\
